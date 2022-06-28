@@ -36,15 +36,6 @@ spec:
           ui:options:
             allowedHosts:
               - github.com
-    - title: Port number
-      required:
-        - port
-      properties:
-        port:
-          title: Port to run the application
-          type: integer
-          description: on this port application will run
-          ui:autofocus: true
   # here's the steps that are executed in series in the scaffolder backend
   steps:
     - id: fetch-base
