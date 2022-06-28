@@ -11,28 +11,28 @@ spec:
   owner: user:guest
   type: service
   parameters:
-    - title: Provide some simple information
+    - title: Provide some basic information
       required:
-        - component_id
-        - owner
+        - name
       properties:
-        component_id:
+        name:
           title: Name
           type: string
           description: Unique name of the component
-          ui:field: EntityNamePicker
-        description:
-          title: Description
-          type: string
-          description: Help others understand what this website is for.
-        owner:
-          title: Owner
-          type: string
-          description: Owner of the component
-          ui:field: OwnerPicker
+          ui:autofocus: true
           ui:options:
-            allowedKinds:
-              - Group
+            rows: 5
+    - title: Choose a location
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
     - title: Choose a location
       required:
         - repoUrl
@@ -45,18 +45,13 @@ spec:
             allowedHosts:
               - github.com
   steps:
-    - id: template
-      name: Fetch Template + Template
+    - id: fetch-base
+      name: Fetch Base
       action: fetch:template
       input:
         url: ./template
-        copyWithoutRender:
-          - .github/workflows/*
         values:
-          component_id: ${{ parameters.component_id }}
-          description: ${{ parameters.description }}
-          destination: ${{ parameters.repoUrl | parseRepoUrl }}
-          owner: ${{ parameters.owner }}
+          name: ${{ parameters.name }}
 
     - id: publish
       name: Publish
@@ -64,7 +59,7 @@ spec:
       input:
         allowedHosts:
           - github.com
-        description: This is ${{ parameters.component_id }}
+        description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
 
     - id: register
