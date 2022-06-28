@@ -1,89 +1,86 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
-metadata: 
-  description: "Create a new CRA website project"
+# some metadata about the template itself
+metadata:
   name: create-react-app-template
+  title: Create React App Template
+  description: Create a new CRA website project
   tags: 
     - react
     - cra
-  title: "Create React App Template"
-spec: 
-  output: 
-    links: 
-      - 
-        title: Repository
-        url: "${{ steps.publish.output.remoteUrl }}"
-      - 
-        entityRef: "${{ steps.register.output.entityRef }}"
-        icon: catalog
-        title: "Open in catalog"
-  owner: "user:guest"
-  parameters: 
-    - 
-      properties: 
-        name: 
-          description: "Unique name of the component"
+spec:
+  owner: user:guest
+  type: service
+
+  # these are the steps which are rendered in the frontend with the form input
+  parameters:
+    - title: Fill in some steps
+      required:
+        - name
+      properties:
+        name:
           title: Name
           type: string
-          ? "ui:autofocus"
-          : true
-          ? "ui:options"
-          : 
+          description: Unique name of the component
+          ui:autofocus: true
+          ui:options:
             rows: 5
-      required: 
-        - name
-      title: "Provide some basic information"
-    - 
-      properties: 
-        repoUrl: 
-          title: "Repository Location"
-          type: string
-          ? "ui:field"
-          : RepoUrlPicker
-          ? "ui:options"
-          : 
-            allowedHosts: 
-              - github.com
-      required: 
+    - title: Choose a location
+      required:
         - repoUrl
-      title: "Choose a location"
-    - 
-      properties: 
-        repoUrl: 
-          title: "Repository Location"
+      properties:
+        repoUrl:
+          title: Repository Location
           type: string
-          ? "ui:field"
-          : RepoUrlPicker
-          ? "ui:options"
-          : 
-            allowedHosts: 
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
               - github.com
-      required: 
-        - repoUrl
-      title: "Choose a location"
-  steps: 
-    - 
-      action: "fetch:template"
-      id: fetch-base
-      input: 
+    - title: Port number
+      required:
+        - port
+      properties:
+        port:
+          title: Port to run the application
+          type: integer
+          description: on this port application will run
+          ui:autofocus: true
+  # here's the steps that are executed in series in the scaffolder backend
+  steps:
+    - id: fetch-base
+      name: Fetch Base
+      action: fetch:template
+      input:
         url: ./template
-        values: 
-          name: "${{ parameters.name }}"
-      name: "Fetch Base"
-    - 
-      action: "publish:github"
-      id: publish
-      input: 
-        allowedHosts: 
-          - github.com
-        description: "This is ${{ parameters.name }}"
-        repoUrl: "${{ parameters.repoUrl }}"
+        values:
+          name: ${{ parameters.name }}
+
+    # - id: fetch-docs
+    #   name: Fetch Docs
+    #   action: fetch:plain
+    #   input:
+    #     targetPath: ./community
+    #     url: https://github.com/backstage/community/tree/main/backstage-community-sessions
+
+    - id: publish
       name: Publish
-    - 
-      action: "catalog:register"
-      id: register
-      input: 
-        catalogInfoPath: /catalog-info.yaml
-        repoContentsUrl: "${{ steps.publish.output.repoContentsUrl }}"
+      action: publish:github
+      input:
+        allowedHosts: ['github.com']
+        description: This is ${{ parameters.name }}
+        repoUrl: ${{ parameters.repoUrl }}
+        token: ${{ secrets.oauth }}
+
+    - id: register
       name: Register
-  type: service
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}
