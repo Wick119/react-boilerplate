@@ -8,31 +8,31 @@ metadata:
     - react
     - cra
 spec:
-  owner: user:guest
-  type: service
+  owner: web@example.com
+  type: website
   parameters:
-    - title: Provide some basic information
+    - title: Provide some simple information
       required:
-        - name
+        - component_id
+        - owner
       properties:
-        name:
+        component_id:
           title: Name
           type: string
           description: Unique name of the component
-          ui:autofocus: true
-          ui:options:
-            rows: 5
-    - title: Choose a location
-      required:
-        - repoUrl
-      properties:
-        repoUrl:
-          title: Repository Location
+          ui:field: EntityNamePicker
+        description:
+          title: Description
           type: string
-          ui:field: RepoUrlPicker
+          description: Help others understand what this website is for.
+        owner:
+          title: Owner
+          type: string
+          description: Owner of the component
+          ui:field: OwnerPicker
           ui:options:
-            allowedHosts:
-              - github.com
+            allowedKinds:
+              - Group
     - title: Choose a location
       required:
         - repoUrl
@@ -45,13 +45,18 @@ spec:
             allowedHosts:
               - github.com
   steps:
-    - id: fetch-base
-      name: Fetch Base
+    - id: template
+      name: Fetch Skeleton + Template
       action: fetch:template
       input:
-        url: ./template
+        url: ./skeleton
+        copyWithoutRender:
+          - .github/workflows/*
         values:
-          name: ${{ parameters.name }}
+          component_id: ${{ parameters.component_id }}
+          description: ${{ parameters.description }}
+          destination: ${{ parameters.repoUrl | parseRepoUrl }}
+          owner: ${{ parameters.owner }}
 
     - id: publish
       name: Publish
@@ -59,7 +64,7 @@ spec:
       input:
         allowedHosts:
           - github.com
-        description: This is ${{ parameters.name }}
+        description: This is ${{ parameters.component_id }}
         repoUrl: ${{ parameters.repoUrl }}
 
     - id: register
