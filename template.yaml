@@ -69,7 +69,6 @@ spec:
         allowedHosts: ['github.com']
         description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
-        token: ${{ secrets.oauth }}
 
     - id: register
       name: Register
