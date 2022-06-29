@@ -3,7 +3,7 @@ kind: Component
 metadata:
   name: ${{ values.name | dump }}
   annotations:
-    gocd.org/pipelines: backstage,backstage-pr,backstage-builder
+    backstage.io/managed-by-location: https://github.com/Wick119/react-boilerplate/blob/master/template/catalog-info.yaml
 spec:
   type: service
   owner: user:guest
