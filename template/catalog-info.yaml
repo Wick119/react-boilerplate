@@ -3,7 +3,7 @@ kind: Component
 metadata:
   name: ${{ values.name | dump }}
   annotations:
-    backstage.io/managed-by-location: https://github.com/Wick119/react-boilerplate/blob/master/template/catalog-info.yaml
+    backstage.io/managed-by-origin-location: https://github.com/Wick119/react-boilerplate/blob/master/template/catalog-info.yaml
 spec:
   type: service
   owner: user:guest
