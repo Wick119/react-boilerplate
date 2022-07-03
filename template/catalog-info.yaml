@@ -3,7 +3,7 @@ kind: Component
 metadata:
   name: ${{ values.name | dump }}
   annotations:
-    backstage.io/managed-by-origin-location: https://github.com/Wick119/react-boilerplate/blob/master/template/catalog-info.yaml
+    sonarqube.org/project-key: React-Test
 spec:
   type: service
   owner: user:guest
