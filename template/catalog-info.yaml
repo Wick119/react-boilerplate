@@ -3,7 +3,7 @@ kind: Component
 metadata:
   name: react-boilerplate
   annotations:
-    sonarqube.org/project-key: react-boilerplate
+    sonarqube.org/project-key: Wick119_react-boilerplate
 spec:
   type: service
   owner: user:guest
