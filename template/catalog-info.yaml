@@ -1,9 +1,9 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: react-skeleton
+  name: react-boilerplate
   annotations:
-    sonarqube.org/project-key: react-skeleton
+    sonarqube.org/project-key: react-boilerplate
 spec:
   type: service
   owner: user:guest
