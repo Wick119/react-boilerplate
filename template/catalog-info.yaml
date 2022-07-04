@@ -3,7 +3,7 @@ kind: Component
 metadata:
   name: ${{ values.name | dump }}
   annotations:
-    sonarqube.org/project-key: React-Test
+    sonarqube.org/project-key: react-boilerplate
 spec:
   type: service
   owner: user:guest
