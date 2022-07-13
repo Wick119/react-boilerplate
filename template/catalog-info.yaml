@@ -3,7 +3,8 @@ kind: Component
 metadata:
   name: react-boilerplate
   annotations:
-    sonarqube.org/project-key: Wick119_react-boilerplate
+    splunk.com/on-call-team: Example
+    #sonarqube.org/project-key: Wick119_react-boilerplate
 spec:
   type: service
   owner: user:guest
